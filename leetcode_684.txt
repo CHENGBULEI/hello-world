@@ -1,0 +1,99 @@
+class Solution {
+public:
+    //int du[1000];
+    //使用并查集,对于每一条边，如果链接的两个顶点在一个集合里面，就是说明时冗余边
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int i,j;
+        int len = edges.size();
+        int du[len+1]={0};
+
+        for(i=1;i<len+1;i++){
+            du[i]=i;
+        }
+
+        int arc[len][len]={0};
+        vector<vector<int > >::iterator it;
+        i=0;
+        int flag=1;
+        for(j=1;j<=len;j++){
+
+            int tt = find(du,edges[j-1][0]);
+            int tr = find(du,edges[j-1][1]);
+            if(tt!=tr){
+                join(edges[j-1][0],edges[j-1][1],du);
+            }else{
+                i = j;
+            }
+            
+            /*
+            flag=1;
+            for(int t=1;t<=len;t++){
+                
+                cout<<du[t];
+                du[t]=t;
+            }
+            cout<<endl;
+            for(int t=1;t<=len;t++){
+                if(t==j);
+                else{
+                    //cout<<edges[t-1][0]<<edges[t-1][1]<<endl;
+                    join(edges[t-1][0],edges[t-1][1],du);
+                }
+            }
+            int tt = find(du,1);
+            int tr;
+            for(int t=2;t<=len;t++){
+                tr = find(du,t);
+                cout<<tt<<tr<<endl;
+                if(tt!=tr){
+                    flag=0;
+                    break;
+                }
+            }
+            if(flag)
+                {
+                    i = j;
+                    cout<<i<<endl;
+                }
+            */
+        }
+        vector<int>res = edges[i-1];
+        return res;
+    }
+    void join(int &x,int &y,int du[]){
+        int i = find(du,x);
+        int j = find(du,y);
+        if(i!=j){
+
+            
+            //找头节点
+            
+            du[i] = j;
+        }        
+    }
+
+    int find(int du[],int x){
+        int r = x;
+        
+        while(du[r]!=r)
+        {
+            r = du[r];//找到根节点
+        }
+        int i=x,j;
+        
+        //当当前节点为根节点时停下
+        while(du[i]!=i){
+            //找到前导节点
+            j =  du[i];
+            //将前导节点的值设为r
+            du[i] = r;
+            //查找上一层几点
+            i = j;
+        }
+        
+        return  r;
+
+    
+        //return du[x];
+    }
+};
